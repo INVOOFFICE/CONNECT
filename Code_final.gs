@@ -528,9 +528,110 @@ function _auth(paramSecret, bodySecret) {
 //   ?action=list          → retourne toutes les voitures
 //   ?action=summary       → retourne les statistiques du catalogue
 //   ?action=sync          → déclenche la sync manuelle vers GitHub
+//   ?payload=<base64>     → mutations PWA (add, update, delete, clear, reorder)
+//                           encodées en base64 pour éviter les problèmes CORS POST
 // ─────────────────────────────────────────────────────────────────────────────
 function doGet(e) {
   const paramSecret = e.parameter.pwa_secret || '';
+
+  // ── Mutations via payload base64 (remplace doPost pour la PWA) ──
+  if (e.parameter.payload) {
+    let body = {};
+    try {
+      const decoded = decodeURIComponent(escape(Utilities.newBlob(Utilities.base64Decode(e.parameter.payload)).getDataAsString()));
+      body = JSON.parse(decoded);
+    } catch (err) {
+      return _jsonResponse({ ok: false, error: 'Payload base64 invalide : ' + err.message });
+    }
+
+    const bodySecret = body.pwa_secret || '';
+    if (!_auth(paramSecret, bodySecret)) {
+      return _jsonResponse({ ok: false, error: 'Non autorisé — secret invalide.' });
+    }
+
+    const action = body.action || '';
+
+    try {
+      // ── Ajouter une voiture ──────────────────────────────────────
+      if (action === 'add') {
+        const car = body.car;
+        if (!car || !car.name) return _jsonResponse({ ok: false, error: 'Champ car.name manquant.' });
+        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+        if (!sheet) return _jsonResponse({ ok: false, error: 'Sheet introuvable.' });
+        sheet.appendRow([
+          car.name         || '',
+          car.price        || 0,
+          car.duration     || 'Per Day',
+          car.seats        || 4,
+          car.transmission || 'Automatic',
+          car.doors        || 4,
+          car.fuel         || 'Petrol',
+          car.image        || '/images/car-placeholder.jpg',
+        ]);
+        onSheetChange({ changeType: 'EDIT' });
+        return _jsonResponse({ ok: true, message: 'Voiture ajoutée et synchronisée.' });
+      }
+
+      // ── Modifier une voiture ─────────────────────────────────────
+      if (action === 'update') {
+        const car = body.car;
+        if (!car || !car.id) return _jsonResponse({ ok: false, error: 'Champ car.id manquant.' });
+        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+        if (!sheet) return _jsonResponse({ ok: false, error: 'Sheet introuvable.' });
+        const rowNum = parseInt(car.id, 10) + 1;
+        sheet.getRange(rowNum, 1, 1, COLUMNS.length).setValues([[
+          car.name         || '',
+          car.price        || 0,
+          car.duration     || 'Per Day',
+          car.seats        || 4,
+          car.transmission || 'Automatic',
+          car.doors        || 4,
+          car.fuel         || 'Petrol',
+          car.image        || '/images/car-placeholder.jpg',
+        ]]);
+        onSheetChange({ changeType: 'EDIT' });
+        return _jsonResponse({ ok: true, message: 'Voiture modifiée et synchronisée.' });
+      }
+
+      // ── Supprimer une voiture ────────────────────────────────────
+      if (action === 'delete') {
+        const id = body.id;
+        if (!id) return _jsonResponse({ ok: false, error: 'Champ id manquant.' });
+        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+        if (!sheet) return _jsonResponse({ ok: false, error: 'Sheet introuvable.' });
+        sheet.deleteRow(parseInt(id, 10) + 1);
+        onSheetChange({ changeType: 'EDIT' });
+        return _jsonResponse({ ok: true, message: 'Voiture supprimée et synchronisée.' });
+      }
+
+      // ── Vider tout le catalogue ──────────────────────────────────
+      if (action === 'clear') {
+        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+        if (!sheet) return _jsonResponse({ ok: false, error: 'Sheet introuvable.' });
+        const lastRow = sheet.getLastRow();
+        if (lastRow > 1) sheet.deleteRows(2, lastRow - 1);
+        onSheetChange({ changeType: 'EDIT' });
+        return _jsonResponse({ ok: true, message: 'Catalogue vidé et synchronisé.' });
+      }
+
+      // ── Réordonner les voitures ──────────────────────────────────
+      if (action === 'reorder') {
+        const cars = body.cars;
+        if (!Array.isArray(cars)) return _jsonResponse({ ok: false, error: 'Champ cars (tableau) manquant.' });
+        _writeCarsToSheet(cars);
+        onSheetChange({ changeType: 'EDIT' });
+        return _jsonResponse({ ok: true, message: 'Voitures réordonnées et synchronisées.' });
+      }
+
+      return _jsonResponse({ ok: false, error: 'Action inconnue : ' + action });
+
+    } catch (err) {
+      Logger.log('[payload action error] ' + err.message);
+      return _jsonResponse({ ok: false, error: err.message });
+    }
+  }
+
+  // ── Requêtes GET classiques (lecture) ────────────────────────────
   if (!_auth(paramSecret, '')) {
     return _jsonResponse({ ok: false, error: 'Non autorisé — secret invalide.' });
   }
