@@ -1,4 +1,4 @@
-const CACHE = 'remons-v1';
+const CACHE = 'remons-v2';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
