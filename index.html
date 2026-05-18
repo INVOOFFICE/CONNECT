@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Remons">
+<meta name="description" content="Remons Car Rental — Gestionnaire de flotte">
+<title>Remons Car Rental</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Reset & Base ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0a0a0f;
+    --bg2:       #111118;
+    --bg3:       #1a1a24;
+    --border:    rgba(255,255,255,0.07);
+    --accent:    #e8ff47;
+    --accent2:   #ff6b35;
+    --text:      #f0f0f8;
+    --muted:     #6b6b80;
+    --danger:    #ff4757;
+    --success:   #2ed573;
+    --card-h:    160px;
+    --safe-top:  env(safe-area-inset-top, 0px);
+    --safe-bot:  env(safe-area-inset-bottom, 0px);
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius:    16px;
+    --shadow:    0 8px 32px rgba(0,0,0,0.5);
+  }
+
+  html { height: 100%; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── App Shell ─────────────────────────────────────────────── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Setup Screen ──────────────────────────────────────────── */
+  #setup-screen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 32px 24px;
+    gap: 0;
+  }
+
+  .setup-logo {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .setup-title {
+    font-family: var(--font-head);
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .setup-sub {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  .setup-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .setup-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .setup-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-input::placeholder { color: var(--muted); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 24px;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:active { opacity: 0.85; transform: scale(0.98); }
+
+  /* ── Header ────────────────────────────────────────────────── */
+  #header {
+    padding: calc(var(--safe-top) + 16px) 20px 0;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+
+  .brand-name {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .icon-btn {
+    width: 40px; height: 40px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .icon-btn:active { background: var(--bg3); transform: scale(0.93); }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  /* ── Stats Row ─────────────────────────────────────────────── */
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .stats-row::-webkit-scrollbar { display: none; }
+
+  .stat-chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-val {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stat-lbl {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  /* ── Tab Bar ───────────────────────────────────────────────── */
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 16px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 6px;
+    cursor: pointer;
+    transition: all 0.18s;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .tab-btn svg { width: 14px; height: 14px; }
+
+  /* ── Scroll Container ──────────────────────────────────────── */
+  #content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px;
+    padding-bottom: calc(var(--safe-bot) + 100px);
+    scrollbar-width: none;
+  }
+  #content::-webkit-scrollbar { display: none; }
+
+  /* ── Car Card ──────────────────────────────────────────────── */
+  .car-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s;
+    animation: slideUp 0.3s ease both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .car-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 3px 0 0 3px;
+  }
+
+  .car-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .car-name {
+    font-family: var(--font-head);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
+    flex: 1;
+    padding-right: 8px;
+  }
+
+  .car-price {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .car-price span {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    display: block;
+    text-align: right;
+  }
+
+  .car-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .badge {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .badge b { color: var(--text); font-weight: 500; }
+
+  .car-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-edit, .btn-delete {
+    flex: 1;
+    border: none;
+    border-radius: 9px;
+    padding: 9px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: opacity 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-edit {
+    background: rgba(232,255,71,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(232,255,71,0.2);
+  }
+
+  .btn-delete {
+    background: rgba(255,71,87,0.1);
+    color: var(--danger);
+    border: 1px solid rgba(255,71,87,0.2);
+  }
+
+  .btn-edit:active, .btn-delete:active { opacity: 0.7; transform: scale(0.96); }
+  .btn-edit svg, .btn-delete svg { width: 13px; height: 13px; }
+
+  /* ── Empty State ───────────────────────────────────────────── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .empty-icon { font-size: 48px; }
+
+  .empty-title {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .empty-sub { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+  /* ── Floating Add Button ───────────────────────────────────── */
+  #fab {
+    position: fixed;
+    bottom: calc(var(--safe-bot) + 32px);
+    right: 20px;
+    width: 56px; height: 56px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(232,255,71,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 100;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #fab:active { transform: scale(0.9); box-shadow: 0 2px 10px rgba(232,255,71,0.2); }
+  #fab svg { width: 24px; height: 24px; color: #000; }
+
+  /* ── Modal ─────────────────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 24px 24px 0 0;
+    padding: 24px 20px calc(var(--safe-bot) + 24px);
+    width: 100%;
+    max-height: 90dvh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0);
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  .form-group { margin-bottom: 14px; }
+
+  .form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--muted); }
+  .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b6b80' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 36px; }
+
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-save {
+    flex: 2;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-save:active { opacity: 0.8; }
+
+  /* ── Toast ─────────────────────────────────────────────────── */
+  #toast {
+    position: fixed;
+    bottom: calc(var(--safe-bot) + 24px);
+    left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 500;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    max-width: calc(100vw - 40px);
+    text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.success { border-color: var(--success); color: var(--success); }
+  #toast.error   { border-color: var(--danger);  color: var(--danger);  }
+
+  /* ── Loader ────────────────────────────────────────────────── */
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Sync badge ────────────────────────────────────────────── */
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .sync-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .sync-dot.syncing {
+    background: var(--accent);
+    animation: pulse 1s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── Settings tab ──────────────────────────────────────────── */
+  .settings-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .settings-section-title {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .btn-danger {
+    width: 100%;
+    background: rgba(255,71,87,0.1);
+    border: 1px solid rgba(255,71,87,0.25);
+    border-radius: 10px;
+    color: var(--danger);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-success-outline {
+    width: 100%;
+    background: rgba(46,213,115,0.08);
+    border: 1px solid rgba(46,213,115,0.2);
+    border-radius: 10px;
+    color: var(--success);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Summary Tab ───────────────────────────────────────────── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .sum-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sum-card.accent { border-color: rgba(232,255,71,0.2); }
+
+  .sum-icon { font-size: 22px; margin-bottom: 4px; }
+  .sum-val {
+    font-family: var(--font-head);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .sum-val.large { font-size: 20px; }
+  .sum-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+  .distrib-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+
+  .distrib-title {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .distrib-bar-wrap { margin-bottom: 10px; }
+  .distrib-bar-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; margin-bottom: 5px;
+  }
+  .distrib-bar-track {
+    height: 6px; background: var(--bg3);
+    border-radius: 3px; overflow: hidden;
+  }
+  .distrib-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: var(--accent);
+    transition: width 0.6s ease;
+  }
+
+  /* ── Confirm modal ─────────────────────────────────────────── */
+  .confirm-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .confirm-overlay.open { opacity: 1; pointer-events: all; }
+
+  .confirm-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .confirm-overlay.open .confirm-box { transform: scale(1); }
+
+  .confirm-emoji { font-size: 40px; margin-bottom: 12px; }
+  .confirm-title { font-family: var(--font-head); font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .confirm-msg { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 24px; }
+  .confirm-btns { display: flex; gap: 10px; }
+  .confirm-no  { flex:1; background: var(--bg3); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:var(--font-head); font-size:13px; font-weight:700; padding:13px; cursor:pointer; }
+  .confirm-yes { flex:1; background: var(--danger); border:none; border-radius:10px; color:#fff; font-family:var(--font-head); font-size:13px; font-weight:800; padding:13px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SETUP SCREEN ═══════════════════════ -->
+<div id="setup-screen">
+  <div class="setup-logo">🚗 Fleet Manager</div>
+  <div class="setup-title">Remons Car Rental</div>
+  <p class="setup-sub">Connectez votre Web App Google Apps Script pour gérer votre flotte depuis cette page.</p>
+
+  <div class="setup-card">
+    <div>
+      <div class="setup-label">URL Web App (Google Apps Script)</div>
+      <input class="setup-input" type="url" id="cfg-url" placeholder="https://script.google.com/macros/s/…/exec">
+    </div>
+    <div>
+      <div class="setup-label">Secret PWA (PWA_SECRET)</div>
+      <input class="setup-input" type="password" id="cfg-secret" placeholder="votre_secret">
+    </div>
+    <button class="btn-primary" onclick="saveConfig()">Connecter →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MAIN APP ════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- Header -->
+  <div id="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-label">Fleet Manager</div>
+        <div class="brand-name">Remons 🚗</div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="syncNow()" title="Sync GitHub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+        <button class="icon-btn" onclick="loadCars()" title="Rafraîchir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M21 13a9 9 0 1 1-3-7.7L21 8"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-chip">
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-lbl">Voitures</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-val" id="stat-avg">—</div>
+        <div class="stat-lbl">Prix moy.</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-val" id="stat-min">—</div>
+        <div class="stat-lbl">Min</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-val" id="stat-max">—</div>
+        <div class="stat-lbl">Max</div>
+      </div>
+    </div>
+
+    <div class="sync-badge">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-label">Chargement…</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="fleet" onclick="switchTab('fleet',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Flotte
+      </button>
+      <button class="tab-btn" data-tab="summary" onclick="switchTab('summary',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Stats
+      </button>
+      <button class="tab-btn" data-tab="settings" onclick="switchTab('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07M1.17 10A10 10 0 0 0 10 22.83M22.83 14A10 10 0 0 0 14 1.17M4.93 4.93l14.14 14.14"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+        Config
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="content">
+
+    <!-- FLEET TAB -->
+    <div id="tab-fleet">
+      <div id="car-list">
+        <div class="loader"><div class="spinner"></div> Chargement…</div>
+      </div>
+    </div>
+
+    <!-- SUMMARY TAB -->
+    <div id="tab-summary" style="display:none">
+      <div class="summary-grid">
+        <div class="sum-card accent">
+          <div class="sum-icon">🚗</div>
+          <div class="sum-val" id="sum-total">—</div>
+          <div class="sum-lbl">Total voitures</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">💰</div>
+          <div class="sum-val large" id="sum-avg">—</div>
+          <div class="sum-lbl">Prix moyen</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">📉</div>
+          <div class="sum-val large" id="sum-min">—</div>
+          <div class="sum-lbl">Prix min</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">📈</div>
+          <div class="sum-val large" id="sum-max">—</div>
+          <div class="sum-lbl">Prix max</div>
+        </div>
+      </div>
+
+      <div class="distrib-section">
+        <div class="distrib-title">⛽ Carburants</div>
+        <div id="fuel-bars"></div>
+      </div>
+
+      <div class="distrib-section">
+        <div class="distrib-title">⚙️ Transmissions</div>
+        <div id="trans-bars"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings" style="display:none">
+      <div class="settings-section">
+        <div class="settings-section-title">🔗 Connexion</div>
+        <div class="form-group">
+          <label class="form-label">URL Web App</label>
+          <input class="form-input" type="url" id="set-url" placeholder="https://script.google.com/…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Secret PWA</label>
+          <input class="form-input" type="password" id="set-secret" placeholder="••••••••">
+        </div>
+        <button class="btn-primary" style="margin-top:4px" onclick="saveSettings()">Sauvegarder</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">🔄 Synchronisation</div>
+        <button class="btn-success-outline" onclick="syncNow()">⚡ Synchroniser vers GitHub</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">⚠️ Zone de danger</div>
+        <button class="btn-danger" onclick="confirmClearAll()">🗑️ Vider tout le catalogue</button>
+        <button class="btn-danger" style="margin-top:8px; background:rgba(255,71,87,0.04)" onclick="resetConfig()">🔌 Déconnecter & réinitialiser</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <button id="fab" onclick="openAddModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+</div>
+
+<!-- ═══════════════════════ CAR MODAL ═══════════════════════════ -->
+<div class="modal-overlay" id="car-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Ajouter une voiture</div>
+
+    <input type="hidden" id="edit-id">
+
+    <div class="form-group">
+      <label class="form-label">Nom de la voiture *</label>
+      <input class="form-input" type="text" id="f-name" placeholder="ex: Dacia Logan">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Prix (MAD) *</label>
+        <input class="form-input" type="number" id="f-price" placeholder="300" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Durée</label>
+        <select class="form-select" id="f-duration">
+          <option>Per Day</option>
+          <option>Per Week</option>
+          <option>Per Month</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Places</label>
+        <select class="form-select" id="f-seats">
+          <option>2</option><option>4</option><option selected>5</option><option>7</option><option>8</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Portes</label>
+        <select class="form-select" id="f-doors">
+          <option>2</option><option selected>4</option><option>5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Transmission</label>
+        <select class="form-select" id="f-transmission">
+          <option>Automatic</option>
+          <option>Manual</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Carburant</label>
+        <select class="form-select" id="f-fuel">
+          <option>Petrol</option>
+          <option>Diesel</option>
+          <option>Electric</option>
+          <option>Hybrid</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">URL Image</label>
+      <input class="form-input" type="url" id="f-image" placeholder="/images/car.jpg ou https://…">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="submitCar()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CONFIRM MODAL ════════════════════════ -->
+<div class="confirm-overlay" id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-emoji" id="confirm-emoji">⚠️</div>
+    <div class="confirm-title" id="confirm-title">Confirmer</div>
+    <div class="confirm-msg" id="confirm-msg">Êtes-vous sûr ?</div>
+    <div class="confirm-btns">
+      <button class="confirm-no" onclick="closeConfirm()">Annuler</button>
+      <button class="confirm-yes" id="confirm-yes-btn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TOAST ═══════════════════════════════ -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════════
+let API_URL    = localStorage.getItem('remons_url')    || '';
+let API_SECRET = localStorage.getItem('remons_secret') || '';
+let carsCache  = [];
+let summaryCache = null;
+let syncing = false;
+
+function saveConfig() {
+  const url    = document.getElementById('cfg-url').value.trim();
+  const secret = document.getElementById('cfg-secret').value.trim();
+  if (!url) { toast('Entrez l\'URL Web App', 'error'); return; }
+  localStorage.setItem('remons_url', url);
+  localStorage.setItem('remons_secret', secret);
+  API_URL    = url;
+  API_SECRET = secret;
+  startApp();
+}
+
+function saveSettings() {
+  const url    = document.getElementById('set-url').value.trim();
+  const secret = document.getElementById('set-secret').value.trim();
+  if (!url) { toast('URL manquante', 'error'); return; }
+  localStorage.setItem('remons_url', url);
+  localStorage.setItem('remons_secret', secret);
+  API_URL    = url;
+  API_SECRET = secret;
+  toast('Configuration sauvegardée ✓', 'success');
+  loadCars();
+}
+
+function resetConfig() {
+  showConfirm('🔌', 'Déconnecter ?', 'La configuration sera effacée. Vous devrez reconnecter l\'app.', () => {
+    localStorage.removeItem('remons_url');
+    localStorage.removeItem('remons_secret');
+    location.reload();
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// API
+// ══════════════════════════════════════════════════════════════════
+async function apiGet(action) {
+  const url = new URL(API_URL);
+  url.searchParams.set('action', action);
+  url.searchParams.set('pwa_secret', API_SECRET);
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function apiPost(body) {
+  body.pwa_secret = API_SECRET;
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// LOAD CARS
+// ══════════════════════════════════════════════════════════════════
+async function loadCars() {
+  setSyncing(true);
+  const list = document.getElementById('car-list');
+  list.innerHTML = '<div class="loader"><div class="spinner"></div> Chargement…</div>';
+
+  try {
+    const data = await apiGet('list');
+    if (!data.ok) throw new Error(data.error || 'Erreur API');
+    carsCache = data.cars || [];
+    renderCars(carsCache);
+    updateStats(carsCache);
+    setSyncing(false, 'Synchronisé · ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}));
+  } catch (err) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-title">Erreur de connexion</div><div class="empty-sub">${err.message}<br><br>Vérifiez l'URL et le secret dans Config.</div></div>`;
+    setSyncing(false, 'Erreur de connexion');
+    toast('Erreur : ' + err.message, 'error');
+  }
+}
+
+async function loadSummary() {
+  try {
+    const data = await apiGet('summary');
+    if (!data.ok) throw new Error(data.error);
+    summaryCache = data;
+    renderSummary(data);
+  } catch(e) {
+    toast('Erreur stats : ' + e.message, 'error');
+  }
+}
+
+function renderCars(cars) {
+  const list = document.getElementById('car-list');
+  if (!cars.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🏁</div><div class="empty-title">Flotte vide</div><div class="empty-sub">Appuyez sur + pour ajouter votre première voiture.</div></div>`;
+    return;
+  }
+
+  list.innerHTML = cars.map((car, idx) => `
+    <div class="car-card" style="animation-delay:${idx * 0.05}s">
+      <div class="car-card-top">
+        <div class="car-name">${esc(car.name)}</div>
+        <div class="car-price">${car.price} MAD<span>${esc(car.duration)}</span></div>
+      </div>
+      <div class="car-badges">
+        <div class="badge">🪑 <b>${car.seats}</b> places</div>
+        <div class="badge">🚪 <b>${car.doors}</b> portes</div>
+        <div class="badge">⚙️ <b>${esc(car.transmission)}</b></div>
+        <div class="badge">⛽ <b>${esc(car.fuel)}</b></div>
+      </div>
+      <div class="car-actions">
+        <button class="btn-edit" onclick="openEditModal(${car.id})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Modifier
+        </button>
+        <button class="btn-delete" onclick="deleteCar(${car.id}, '${esc(car.name)}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateStats(cars) {
+  const prices = cars.map(c => c.price).filter(p => p > 0);
+  document.getElementById('stat-total').textContent = cars.length;
+  document.getElementById('stat-avg').textContent   = prices.length ? Math.round(prices.reduce((a,b)=>a+b,0)/prices.length) + ' MAD' : '—';
+  document.getElementById('stat-min').textContent   = prices.length ? Math.min(...prices) + ' MAD' : '—';
+  document.getElementById('stat-max').textContent   = prices.length ? Math.max(...prices) + ' MAD' : '—';
+}
+
+function renderSummary(d) {
+  document.getElementById('sum-total').textContent = d.total;
+  document.getElementById('sum-avg').textContent   = d.avgPrice + ' MAD';
+  document.getElementById('sum-min').textContent   = d.minPrice + ' MAD';
+  document.getElementById('sum-max').textContent   = d.maxPrice + ' MAD';
+
+  const renderBars = (containerId, obj) => {
+    const total = Object.values(obj).reduce((a,b)=>a+b,0) || 1;
+    document.getElementById(containerId).innerHTML = Object.entries(obj).map(([k,v]) => `
+      <div class="distrib-bar-wrap">
+        <div class="distrib-bar-label"><span>${k}</span><span>${v} (${Math.round(v/total*100)}%)</span></div>
+        <div class="distrib-bar-track"><div class="distrib-bar-fill" style="width:${Math.round(v/total*100)}%"></div></div>
+      </div>
+    `).join('');
+  };
+
+  renderBars('fuel-bars', d.fuels || {});
+  renderBars('trans-bars', d.transmissions || {});
+}
+
+// ══════════════════════════════════════════════════════════════════
+// ADD / EDIT
+// ══════════════════════════════════════════════════════════════════
+function openAddModal() {
+  document.getElementById('modal-title').textContent = '➕ Ajouter une voiture';
+  document.getElementById('edit-id').value = '';
+  ['name','price','image'].forEach(id => document.getElementById('f-'+id).value = '');
+  document.getElementById('f-duration').value     = 'Per Day';
+  document.getElementById('f-seats').value        = '5';
+  document.getElementById('f-doors').value        = '4';
+  document.getElementById('f-transmission').value = 'Automatic';
+  document.getElementById('f-fuel').value         = 'Petrol';
+  openModal();
+}
+
+function openEditModal(id) {
+  const car = carsCache.find(c => c.id === id);
+  if (!car) return;
+  document.getElementById('modal-title').textContent = '✏️ Modifier la voiture';
+  document.getElementById('edit-id').value           = car.id;
+  document.getElementById('f-name').value            = car.name;
+  document.getElementById('f-price').value           = car.price;
+  document.getElementById('f-duration').value        = car.duration;
+  document.getElementById('f-seats').value           = car.seats;
+  document.getElementById('f-doors').value           = car.doors;
+  document.getElementById('f-transmission').value   = car.transmission;
+  document.getElementById('f-fuel').value            = car.fuel;
+  document.getElementById('f-image').value           = car.image;
+  openModal();
+}
+
+async function submitCar() {
+  const name = document.getElementById('f-name').value.trim();
+  const price = parseFloat(document.getElementById('f-price').value);
+  if (!name) { toast('Le nom est requis', 'error'); return; }
+  if (!price || isNaN(price)) { toast('Prix invalide', 'error'); return; }
+
+  const car = {
+    name,
+    price,
+    duration:     document.getElementById('f-duration').value,
+    seats:        parseInt(document.getElementById('f-seats').value),
+    doors:        parseInt(document.getElementById('f-doors').value),
+    transmission: document.getElementById('f-transmission').value,
+    fuel:         document.getElementById('f-fuel').value,
+    image:        document.getElementById('f-image').value.trim() || '/images/car-placeholder.jpg',
+  };
+
+  const editId = document.getElementById('edit-id').value;
+  const action = editId ? 'update' : 'add';
+  if (editId) car.id = parseInt(editId);
+
+  closeModal();
+  setSyncing(true);
+  try {
+    const data = await apiPost({ action, car });
+    if (!data.ok) throw new Error(data.error);
+    toast(editId ? '✏️ Voiture modifiée !' : '✅ Voiture ajoutée !', 'success');
+    await loadCars();
+  } catch(e) {
+    toast('Erreur : ' + e.message, 'error');
+    setSyncing(false, 'Erreur');
+  }
+}
+
+async function deleteCar(id, name) {
+  showConfirm('🗑️', 'Supprimer la voiture ?', `"${name}" sera définitivement supprimé du catalogue et de GitHub.`, async () => {
+    setSyncing(true);
+    try {
+      const data = await apiPost({ action: 'delete', id });
+      if (!data.ok) throw new Error(data.error);
+      toast('🗑️ Voiture supprimée', 'success');
+      await loadCars();
+    } catch(e) {
+      toast('Erreur : ' + e.message, 'error');
+      setSyncing(false, 'Erreur');
+    }
+  });
+}
+
+async function syncNow() {
+  setSyncing(true);
+  try {
+    const data = await apiGet('sync');
+    if (!data.ok) throw new Error(data.error);
+    toast('⚡ Synchronisé vers GitHub !', 'success');
+    setSyncing(false, 'Synchronisé · ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    toast('Erreur sync : ' + e.message, 'error');
+    setSyncing(false, 'Erreur sync');
+  }
+}
+
+async function confirmClearAll() {
+  showConfirm('⚠️', 'Vider tout le catalogue ?', 'Toutes les voitures seront supprimées du sheet et de GitHub. Cette action est irréversible.', async () => {
+    setSyncing(true);
+    try {
+      const data = await apiPost({ action: 'clear' });
+      if (!data.ok) throw new Error(data.error);
+      toast('🗑️ Catalogue vidé', 'success');
+      await loadCars();
+    } catch(e) {
+      toast('Erreur : ' + e.message, 'error');
+      setSyncing(false);
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════════════════════
+function switchTab(tab, btn) {
+  ['fleet','summary','settings'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fab').style.display = tab === 'fleet' ? '' : 'none';
+
+  if (tab === 'summary') loadSummary();
+  if (tab === 'settings') {
+    document.getElementById('set-url').value    = API_URL;
+    document.getElementById('set-secret').value = API_SECRET;
+  }
+}
+
+function openModal() {
+  document.getElementById('car-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('f-name').focus(), 350);
+}
+
+function closeModal() {
+  document.getElementById('car-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+let confirmCallback = null;
+function showConfirm(emoji, title, msg, cb) {
+  document.getElementById('confirm-emoji').textContent = emoji;
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent   = msg;
+  confirmCallback = cb;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+document.getElementById('confirm-yes-btn').onclick = () => { closeConfirm(); confirmCallback && confirmCallback(); };
+function closeConfirm() { document.getElementById('confirm-modal').classList.remove('open'); }
+
+function setSyncing(active, label) {
+  syncing = active;
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  if (active) {
+    dot.classList.add('syncing');
+    lbl.textContent = 'Synchronisation…';
+  } else {
+    dot.classList.remove('syncing');
+    lbl.textContent = label || 'Prêt';
+  }
+}
+
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Close modal on overlay click
+document.getElementById('car-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.getElementById('confirm-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeConfirm();
+});
+
+// ══════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════
+function startApp() {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  loadCars();
+}
+
+if (API_URL) {
+  startApp();
+}
+
+// Service Worker registration
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
