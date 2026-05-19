@@ -1,5 +1,5 @@
 const CACHE = 'remons-v2';
-const ASSETS = ['/', '/index.html', '/manifest.json'];
+const ASSETS = ['./', './index.html', './manifest.json', './404.html'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -16,7 +16,6 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Network first for API calls, cache first for assets
   const url = e.request.url;
   if (url.includes('script.google.com')) {
     e.respondWith(fetch(e.request).catch(() => new Response('{"ok":false,"error":"Offline"}', {headers:{'Content-Type':'application/json'}})));

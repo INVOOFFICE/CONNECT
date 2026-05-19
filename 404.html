@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirection…</title>
+  <script>
+    var path = window.location.pathname;
+    sessionStorage.redirect = path;
+    window.location.replace('/CONNECT/');
+  </script>
+</head>
+<body>
+  <p>Redirection vers l'application…</p>
+</body>
+</html>

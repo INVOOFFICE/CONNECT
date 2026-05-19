@@ -1545,9 +1545,18 @@ if (API_URL) {
   startApp();
 }
 
+// Restore redirect path from 404.html fallback
+(function() {
+  var redirect = sessionStorage.redirect;
+  if (redirect) {
+    sessionStorage.removeItem('redirect');
+    history.replaceState(null, '', redirect);
+  }
+})();
+
 // Service Worker registration
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js').catch(function() {});
 }
 </script>
 </body>
