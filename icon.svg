@@ -1,27 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#0a0a0f"/>
-  <line x1="256" y1="172" x2="136" y2="296" stroke="#e8ff47" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
-  <line x1="256" y1="172" x2="376" y2="296" stroke="#e8ff47" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
-  <line x1="136" y1="296" x2="256" y2="376" stroke="#e8ff47" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
-  <line x1="376" y1="296" x2="256" y2="376" stroke="#e8ff47" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
-  <line x1="136" y1="296" x2="376" y2="296" stroke="#e8ff47" stroke-width="3" stroke-linecap="round" opacity="0.25"/>
-  <line x1="256" y1="172" x2="164" y2="118" stroke="#e8ff47" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-  <line x1="256" y1="172" x2="348" y2="118" stroke="#e8ff47" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-  <line x1="136" y1="296" x2="80" y2="254" stroke="#e8ff47" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-  <line x1="376" y1="296" x2="432" y2="254" stroke="#e8ff47" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-  <circle cx="164" cy="118" r="12" fill="#1a1a24" stroke="#e8ff47" stroke-width="3" opacity="0.65"/>
-  <circle cx="348" cy="118" r="12" fill="#1a1a24" stroke="#e8ff47" stroke-width="3" opacity="0.65"/>
-  <circle cx="80" cy="254" r="12" fill="#1a1a24" stroke="#e8ff47" stroke-width="3" opacity="0.65"/>
-  <circle cx="432" cy="254" r="12" fill="#1a1a24" stroke="#e8ff47" stroke-width="3" opacity="0.65"/>
-  <circle cx="136" cy="296" r="22" fill="#1a1a24" stroke="#e8ff47" stroke-width="4"/>
-  <circle cx="376" cy="296" r="22" fill="#1a1a24" stroke="#e8ff47" stroke-width="4"/>
-  <circle cx="256" cy="376" r="22" fill="#1a1a24" stroke="#e8ff47" stroke-width="4"/>
-  <circle cx="136" cy="296" r="10" fill="#e8ff47"/>
-  <circle cx="376" cy="296" r="10" fill="#e8ff47"/>
-  <circle cx="256" cy="376" r="10" fill="#e8ff47"/>
-  <circle cx="256" cy="172" r="38" fill="#e8ff47"/>
-  <circle cx="256" cy="172" r="18" fill="#0a0a0f"/>
-  <circle cx="256" cy="172" r="7" fill="#e8ff47"/>
-  <text x="256" y="468" font-family="Arial Black,sans-serif" font-size="56" font-weight="800" fill="#f0f0f8" text-anchor="middle" letter-spacing="4">connect</text>
-  <rect x="148" y="478" width="216" height="4" rx="2" fill="#e8ff47"/>
+<svg width="100%" viewBox="0 0 522 522" xmlns="http://www.w3.org/2000/svg" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Connect App Icon</title>
+  <rect width="512" height="512" rx="115" fill="#1a1a1a" style="fill:rgb(26, 26, 26);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <g transform="translate(256,190) scale(17.6) translate(-10,-10)" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <path transform="translate(-84,-5319)" d="M89,5335 L89,5335 C88.448,5335 88,5334.552 88,5334 C88,5333.448 88.448,5333 89,5333 C89.552,5333 90,5333.448 90,5334 C90,5334.552 89.552,5335 89,5335 M99,5333 L99,5333 C99.552,5333 100,5333.448 100,5334 C100,5334.552 99.552,5335 99,5335 C98.448,5335 98,5334.552 98,5334 C98,5333.448 98.448,5333 99,5333 M90.602,5321 L97.398,5321 C97.896,5321 98.318,5321.366 98.388,5321.859 L99.694,5331 L88.306,5331 L89.612,5321.859 C89.682,5321.366 90.104,5321 90.602,5321 M104,5328 L104,5328 C104,5327.448 103.552,5327 103,5327 L101.143,5327 L100.245,5320.717 C100.105,5319.732 99.261,5319 98.265,5319 L89.735,5319 C88.739,5319 87.895,5319.732 87.755,5320.717 L86.857,5327 L85,5327 C84.448,5327 84,5327.448 84,5328 C84,5328.552 84.448,5329 85,5329 L86.571,5329 L86.286,5331 L86,5331 C84.895,5331 84,5331.895 84,5333 L84,5335 C84,5336.105 84.895,5337 86,5337 L86,5338 C86,5338.552 86.448,5339 87,5339 L89,5339 C89.552,5339 90,5338.552 90,5338 L90,5337 L98,5337 L98,5338 C98,5338.552 98.448,5339 99,5339 L101,5339 C101.552,5339 102,5338.552 102,5338 L102,5337 C103.105,5337 104,5336.105 104,5335 L104,5333 C104,5331.895 103.105,5331 102,5331 L101.714,5331 L101.429,5329 L103,5329 C103.552,5329 104,5328.552 104,5328" fill="#CCFF00" fill-rule="evenodd" style="fill:rgb(204, 255, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  </g>
+  <text x="256" y="470" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif" font-size="64" font-weight="700" fill="#CCFF00" letter-spacing="-1" style="fill:rgb(204, 255, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:-apple-system, BlinkMacSystemFont, &quot;Helvetica Neue&quot;, sans-serif;font-size:64px;font-weight:700;text-anchor:middle;dominant-baseline:auto">Connect</text>
 </svg>
