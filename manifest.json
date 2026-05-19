@@ -2,7 +2,7 @@
   "name": "Remons Car Rental",
   "short_name": "Remons",
   "description": "Gestionnaire de flotte — Remons Car Rental",
-  "start_url": "https://invooffice.github.io/CONNECT/",
+  "start_url": "/CONNECT/",
   "scope": "/CONNECT/",
   "display": "standalone",
   "background_color": "#0a0a0f",
