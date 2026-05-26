@@ -1,0 +1,15 @@
+<!-- Sync Modal -->
+    <div class="modal-overlay" id="sync-modal">
+        <div class="modal" style="max-height: 50vh;">
+            <div class="modal-header">
+                <h3 class="modal-title">Synchronisation</h3>
+                <button class="modal-close" onclick="closeModal('sync-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 40px 20px;">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--primary); margin-bottom: 16px;"></i>
+                <h3 style="margin-bottom: 8px;">Sync GitHub</h3>
+                <p style="color: var(--secondary); margin-bottom: 24px;">Synchroniser les donnees avec le depot GitHub ?</p>
+                <button class="btn btn-primary" onclick="syncToGitHub()" style="width: 100%;"><i class="fas fa-sync"></i> Synchroniser maintenant</button>
+            </div>
+        </div>
+    </div>

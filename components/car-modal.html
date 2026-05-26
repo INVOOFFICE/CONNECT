@@ -1,0 +1,76 @@
+<!-- Car Modal -->
+    <div class="modal-overlay" id="car-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="car-modal-title">Nouveau vehicule</h3>
+                <button class="modal-close" onclick="closeModal('car-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <img src="https://via.placeholder.com/400x160?text=Image+du+vehicule" alt="Preview" class="image-preview" id="car-image-preview">
+                <div class="form-group">
+                    <label>URL de l'image</label>
+                    <input type="url" class="form-control" id="car-image" placeholder="https://..." onchange="previewImage()">
+                </div>
+                <div class="form-group">
+                    <label>Nom du vehicule *</label>
+                    <input type="text" class="form-control" id="car-name" placeholder="ex: Dacia Logan 2023">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Prix (MAD) *</label>
+                        <input type="number" class="form-control" id="car-price" placeholder="250">
+                    </div>
+                    <div class="form-group">
+                        <label>Duree</label>
+                        <select class="form-control" id="car-duration">
+                            <option value="Per Day">Par jour</option>
+                            <option value="Per Week">Par semaine</option>
+                            <option value="Per Month">Par mois</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Places</label>
+                        <select class="form-control" id="car-seats">
+                            <option value="2">2 places</option>
+                            <option value="4" selected>4 places</option>
+                            <option value="5">5 places</option>
+                            <option value="7">7 places</option>
+                            <option value="9">9 places</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Portes</label>
+                        <select class="form-control" id="car-doors">
+                            <option value="2">2 portes</option>
+                            <option value="4" selected>4 portes</option>
+                            <option value="5">5 portes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Transmission</label>
+                        <select class="form-control" id="car-transmission">
+                            <option value="Automatic">Automatique</option>
+                            <option value="Manual">Manuelle</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Carburant</label>
+                        <select class="form-control" id="car-fuel">
+                            <option value="Petrol">Essence</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybrid">Hybride</option>
+                            <option value="Electric">Electrique</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('car-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveCar()"><i class="fas fa-save"></i> Enregistrer</button>
+            </div>
+        </div>
+    </div>

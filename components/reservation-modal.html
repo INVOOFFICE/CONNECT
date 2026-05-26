@@ -1,0 +1,47 @@
+<!-- Reservation Modal -->
+    <div class="modal-overlay" id="res-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Nouvelle reservation</h3>
+                <button class="modal-close" onclick="closeModal('res-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Client *</label>
+                    <input type="text" class="form-control" id="res-name" placeholder="Nom complet">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" class="form-control" id="res-email" placeholder="client@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Telephone *</label>
+                        <input type="tel" class="form-control" id="res-phone" placeholder="+212 6XX XXX XXX">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Vehicule *</label>
+                    <select class="form-control" id="res-car"><option value="">Choisir un vehicule...</option></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date debut *</label>
+                        <input type="date" class="form-control" id="res-start">
+                    </div>
+                    <div class="form-group">
+                        <label>Date fin *</label>
+                        <input type="date" class="form-control" id="res-end">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea class="form-control" id="res-notes" rows="3" placeholder="Commentaires..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('res-modal')">Annuler</button>
+                <button class="btn btn-primary" onclick="saveReservation()"><i class="fas fa-calendar-check"></i> Creer</button>
+            </div>
+        </div>
+    </div>

@@ -1,31 +1,20 @@
-const CACHE = 'remons-v3';
-const ASSETS = ['./', './index.html', './manifest.json', './404.html'];
+const CACHE_NAME = 'yaro-admin-v1';
+const ASSETS = [
+    './', './index.html', './styles/main.css', './scripts/config.js', './scripts/api.js', './scripts/app.js', './scripts/bootstrap.js',
+    './assets/pwa.png', './config/manifest.json', './components/splash.html', './sections/app-shell.html', './components/bottom-nav.html',
+    './components/car-modal.html', './components/reservation-modal.html', './components/sync-modal.html', './components/settings-modal.html',
+    './components/toast-container.html', './components/loading-overlay.html', './components/install-prompt.html'
+];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
-  );
+self.addEventListener('install', (event) => {
+    event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
+self.addEventListener('activate', (event) => {
+    event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))));
 });
 
-self.addEventListener('fetch', e => {
-  const url = e.request.url;
-  if (url.includes('script.google.com')) {
-    e.respondWith(fetch(e.request).catch(() => new Response('{"ok":false,"error":"Offline"}', {headers:{'Content-Type':'application/json'}})));
-    return;
-  }
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-      const clone = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, clone));
-      return res;
-    }))
-  );
+self.addEventListener('fetch', (event) => {
+    if (event.request.method !== 'GET') return;
+    event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
 });
