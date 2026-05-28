@@ -11,6 +11,10 @@ let cars = [];
             setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
             document.getElementById('settings-url').value = CONFIG.API_URL;
             document.getElementById('settings-secret').value = CONFIG.PWA_SECRET;
+            if (!CONFIG.API_URL || !CONFIG.PWA_SECRET) {
+                setTimeout(() => showSettings(), 500);
+                return;
+            }
             loadCars();
             loadReservations();
             const today = new Date().toISOString().split('T')[0];
