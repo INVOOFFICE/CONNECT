@@ -10,7 +10,7 @@ let cars = [];
         function initializeApp() {
             setTimeout(() => {
                 document.getElementById('splash').classList.add('hidden');
-                if (!CONFIG.API_URL || !CONFIG.PWA_SECRET) {
+                if (!CONFIG.PWA_SECRET) {
                     showLogin();
                     return;
                 }
@@ -49,7 +49,6 @@ let cars = [];
         }
 
         async function login() {
-            const url = document.getElementById('login-url').value.trim();
             const secret = document.getElementById('login-secret').value.trim();
             const btn = document.getElementById('login-btn');
             const errorEl = document.getElementById('login-error');
@@ -57,8 +56,8 @@ let cars = [];
 
             errorEl.classList.add('hidden');
 
-            if (!url || !secret) {
-                errorText.textContent = 'Veuillez remplir tous les champs';
+            if (!secret) {
+                errorText.textContent = 'Veuillez entrer le mot de passe secret';
                 errorEl.classList.remove('hidden');
                 return;
             }
@@ -66,14 +65,12 @@ let cars = [];
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
 
-            const savedUrl = CONFIG.API_URL;
             const savedSecret = CONFIG.PWA_SECRET;
-            CONFIG.API_URL = url;
             CONFIG.PWA_SECRET = secret;
 
             try {
                 const params = new URLSearchParams({ pwa_secret: secret, action: 'list' });
-                const response = await fetch(`${url}?${params.toString()}`, {
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`, {
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 });
@@ -81,14 +78,11 @@ let cars = [];
                 const data = await response.json();
                 if (!data.ok) throw new Error(data.error || 'Reponse API invalide');
 
-                localStorage.setItem('yaro_api_url', url);
                 localStorage.setItem('yaro_secret', secret);
-                CONFIG.API_URL = url;
                 CONFIG.PWA_SECRET = secret;
                 showToast('Connecte avec succes', 'success');
                 startApp();
             } catch (error) {
-                CONFIG.API_URL = savedUrl;
                 CONFIG.PWA_SECRET = savedSecret;
                 errorText.textContent = error.message;
                 errorEl.classList.remove('hidden');
@@ -99,9 +93,7 @@ let cars = [];
         }
 
         function logout() {
-            localStorage.removeItem('yaro_api_url');
             localStorage.removeItem('yaro_secret');
-            CONFIG.API_URL = '';
             CONFIG.PWA_SECRET = '';
             location.reload();
         }
@@ -362,9 +354,7 @@ let cars = [];
         function showSettings() { openModal('settings-modal'); }
 
         function saveSettings() {
-            const url = document.getElementById('settings-url').value;
             const secret = document.getElementById('settings-secret').value;
-            if (url) { localStorage.setItem('yaro_api_url', url); CONFIG.API_URL = url; }
             if (secret) { localStorage.setItem('yaro_secret', secret); CONFIG.PWA_SECRET = secret; }
             showToast('Parametres sauvegardes', 'success');
             closeModal('settings-modal');

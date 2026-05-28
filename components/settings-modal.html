@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>URL API Google Script</label>
-                    <input type="url" class="form-control" id="settings-url" placeholder="https://script.google.com/...">
+                    <input type="url" class="form-control" id="settings-url" readonly style="background:var(--bg-secondary);color:var(--secondary);cursor:not-allowed">
                 </div>
                 <div class="form-group">
                     <label>Mot de passe secret (PWA_SECRET)</label>
@@ -16,7 +16,7 @@
                 </div>
                 <div style="padding: 16px; background: var(--primary-light); border-radius: var(--radius-sm); margin-top: 16px;">
                     <p style="font-size: 13px; color: var(--primary-dark); line-height: 1.6;">
-                        <i class="fas fa-info-circle"></i> Entrez l'URL de votre Google Apps Script et le code secret de votre sheet pour connecter l'application. Ces informations sont stockees localement sur votre appareil.
+                        <i class="fas fa-info-circle"></i> Le mot de passe secret est stocke localement sur votre appareil.
                     </p>
                 </div>
             </div>
