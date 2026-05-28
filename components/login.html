@@ -1,0 +1,25 @@
+<!-- Login Screen -->
+<div class="login-overlay hidden" id="login-screen">
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="assets/pwa.png" alt="Yaro" class="login-brand-img">
+        </div>
+        <h1 class="login-title">Yaro Admin</h1>
+        <p class="login-subtitle">Connectez-vous a votre interface de gestion</p>
+        <div id="login-error" class="login-error hidden">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="login-error-text">Erreur de connexion</span>
+        </div>
+        <div class="form-group">
+            <label>URL API Google Script</label>
+            <input type="url" class="form-control" id="login-url" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+        <div class="form-group">
+            <label>Mot de passe secret (PWA_SECRET)</label>
+            <input type="password" class="form-control" id="login-secret" placeholder="Entrez votre mot de passe secret">
+        </div>
+        <button class="btn btn-primary login-btn" id="login-btn" onclick="login()">
+            <i class="fas fa-sign-in-alt"></i> Connecter
+        </button>
+    </div>
+</div>

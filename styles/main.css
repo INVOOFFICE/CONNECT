@@ -53,6 +53,30 @@
         .splash-title { color: white; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
         .splash-subtitle { color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 8px; font-weight: 400; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .login-overlay {
+            position: fixed; inset: 0; z-index: 8000;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px; transition: opacity 0.4s ease, visibility 0.4s;
+        }
+        .login-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .login-container {
+            width: 100%; max-width: 400px; background: white;
+            border-radius: var(--radius); padding: 40px 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: fadeIn 0.5s ease;
+        }
+        .login-logo { text-align: center; margin-bottom: 8px; }
+        .login-brand-img { width: 72px; height: 72px; border-radius: 18px; }
+        .login-title { text-align: center; font-size: 24px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+        .login-subtitle { text-align: center; font-size: 14px; color: var(--secondary); margin-bottom: 24px; line-height: 1.4; }
+        .login-btn { width: 100%; padding: 14px; font-size: 16px; margin-top: 8px; }
+        .login-error {
+            background: #fee2e2; color: #991b1b; padding: 10px 14px;
+            border-radius: var(--radius-sm); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;
+        }
+        .login-error.hidden { display: none; }
         .app-container { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--light); position: relative; padding-bottom: 80px; }
         .app-header {
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);

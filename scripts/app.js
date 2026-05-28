@@ -8,13 +8,20 @@ let cars = [];
         let currentResFilter = 'all';
 
         function initializeApp() {
-            setTimeout(() => { document.getElementById('splash').classList.add('hidden'); }, 2000);
+            setTimeout(() => {
+                document.getElementById('splash').classList.add('hidden');
+                if (!CONFIG.API_URL || !CONFIG.PWA_SECRET) {
+                    showLogin();
+                    return;
+                }
+                startApp();
+            }, 2000);
+        }
+
+        function startApp() {
+            document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('settings-url').value = CONFIG.API_URL;
             document.getElementById('settings-secret').value = CONFIG.PWA_SECRET;
-            if (!CONFIG.API_URL || !CONFIG.PWA_SECRET) {
-                setTimeout(() => showSettings(), 500);
-                return;
-            }
             loadCars();
             loadReservations();
             const today = new Date().toISOString().split('T')[0];
@@ -31,6 +38,72 @@ let cars = [];
                 const touchEndY = e.changedTouches[0].clientY;
                 if (touchEndY - touchStartY > 150 && window.scrollY === 0) refreshData();
             });
+        }
+
+        function showLogin() {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function hideLogin() {
+            document.getElementById('login-screen').classList.add('hidden');
+        }
+
+        async function login() {
+            const url = document.getElementById('login-url').value.trim();
+            const secret = document.getElementById('login-secret').value.trim();
+            const btn = document.getElementById('login-btn');
+            const errorEl = document.getElementById('login-error');
+            const errorText = document.getElementById('login-error-text');
+
+            errorEl.classList.add('hidden');
+
+            if (!url || !secret) {
+                errorText.textContent = 'Veuillez remplir tous les champs';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+
+            const savedUrl = CONFIG.API_URL;
+            const savedSecret = CONFIG.PWA_SECRET;
+            CONFIG.API_URL = url;
+            CONFIG.PWA_SECRET = secret;
+
+            try {
+                const params = new URLSearchParams({ pwa_secret: secret, action: 'list' });
+                const response = await fetch(`${url}?${params.toString()}`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) throw new Error('Impossible de joindre le serveur');
+                const data = await response.json();
+                if (!data.ok) throw new Error(data.error || 'Reponse API invalide');
+
+                localStorage.setItem('yaro_api_url', url);
+                localStorage.setItem('yaro_secret', secret);
+                CONFIG.API_URL = url;
+                CONFIG.PWA_SECRET = secret;
+                showToast('Connecte avec succes', 'success');
+                startApp();
+            } catch (error) {
+                CONFIG.API_URL = savedUrl;
+                CONFIG.PWA_SECRET = savedSecret;
+                errorText.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Connecter';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('yaro_api_url');
+            localStorage.removeItem('yaro_secret');
+            CONFIG.API_URL = '';
+            CONFIG.PWA_SECRET = '';
+            location.reload();
         }
         async function loadCars() {
             try {

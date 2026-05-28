@@ -1,4 +1,5 @@
 const PARTIALS = [
+    'components/login.html',
     'components/splash.html',
     'sections/app-shell.html',
     'components/bottom-nav.html',
